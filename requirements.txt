@@ -1,0 +1,5 @@
+pandas
+ta
+yfinance
+requests
+pytz
