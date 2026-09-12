@@ -5,9 +5,11 @@ import ta
 import yfinance as yf
 from datetime import datetime
 import pytz
+import threading
+from flask import Flask
 
 # --- CONFIGURATION ---
-DISCORD_WEBHOOK_URL = "YOUR_DISCORD_WEBHOOK_URL_HERE"
+DISCORD_WEBHOOK_URL = "YOUR_DISCORD_WEBHOOK_URL_HERE"  # <-- YAHAN APNA DISCORD WEBHOOK URL PASTE KAREIN
 SYMBOL = "GC=F"  # Gold Futures (Ya Currency pairs jaise EURUSD=X)
 TIMEFRAME = "1m"
 EMA_PERIOD = 200
@@ -16,6 +18,13 @@ RR_RATIO = 1.5
 
 # Pakistan Timezone
 PKT = pytz.timezone('Asia/Karachi')
+
+# Flask Web Server for Render Free Tier
+app = Flask(__name__)
+
+@app.route('/')
+def health_check():
+    return "ICT Bot Engine is 24/7 Active!"
 
 def send_discord_alert(message):
     data = {"content": message}
@@ -134,4 +143,7 @@ def run_bot():
         time.sleep(10)
 
 if __name__ == "__main__":
-    run_bot()
+    # Bot loop in background thread
+    threading.Thread(target=run_bot, daemon=True).start()
+    # Web server to satisfy Render free tier check
+    app.run(host='0.0.0.0', port=10000)
