@@ -3,3 +3,5 @@ ta
 yfinance
 requests
 pytz
+flask
+gunicorn
